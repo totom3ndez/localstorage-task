@@ -3,15 +3,18 @@ import TaskTable from './components/TaskTable';
 import { Container } from './components/Container';
 import { ShowDoneTasks } from './components/ShowDoneTasks';
 import { useState, useEffect } from 'react';
-import './App.css';
 
 function App() {
 	const [taskItems, settaskItems] = useState([]);
 	const [showCompleted, setShowCompleted] = useState(false);
+	const [isImportant, setIsImportant] = useState(false);
 
 	function createNewTask(taskName) {
 		if (!taskItems.find(task => task.name === taskName)) {
-			settaskItems([...taskItems, { name: taskName, done: false }]);
+			settaskItems([
+				...taskItems,
+				{ name: taskName, done: false, important: isImportant },
+			]);
 		}
 	}
 
@@ -37,11 +40,32 @@ function App() {
 		localStorage.setItem('tasks', JSON.stringify(taskItems));
 	}, [taskItems]);
 
+	const handleOnChange = () => {
+		setIsImportant(!isImportant);
+	};
+
 	return (
 		<main className='bg-dark vh-100 text-white'>
 			<Container>
 				<TaskCreator createNewTask={createNewTask} />
-				<TaskTable tasks={taskItems} toggleTask={toggleTask} />
+				<label className='col-4 my-2'>
+					Important
+					<input
+						className='ms-2'
+						type='checkbox'
+						checked={isImportant}
+						onChange={handleOnChange}
+					/>
+				</label>
+				<TaskTable
+					tasks={taskItems}
+					toggleTask={toggleTask}
+					rowStyle={() => {
+						if (isImportant) {
+							return { backgroundColor: 'red' };
+						}
+					}}
+				/>
 
 				<ShowDoneTasks
 					isChecked={showCompleted}

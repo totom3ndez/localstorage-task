@@ -1,18 +1,23 @@
 import TaskRow from './TaskRow';
 
-const TaskTable = ({ tasks, toggleTask, showCompleted = false }) => {
+const TaskTable = ({ rowStyle, tasks, toggleTask, showCompleted = false }) => {
 	const taskTableRows = doneValue => {
 		return tasks
 			.filter(task => task.done === doneValue)
 			.map((task, index) => (
-				<TaskRow task={task} key={index} toggleTask={toggleTask} />
+				<TaskRow
+					rowStyle={rowStyle}
+					task={task}
+					key={index}
+					toggleTask={toggleTask}
+				/>
 			));
 	};
 
 	return (
 		<table className='table table-dark table-striped table-bordered border-secondary'>
 			<thead>
-				<tr className='table-primary'>
+				<tr className='table-primary text-center'>
 					<th>Tasks</th>
 				</tr>
 			</thead>
